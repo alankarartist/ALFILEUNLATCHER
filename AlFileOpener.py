@@ -8,8 +8,8 @@ class AlFileOpener():
     def __init__(self):
         root = Tk(className = " AlFileOpener ")
         root.geometry("400x125+1500+890")
-        root.config(bg="#f0ce69")
-        color = '#f0ce69'
+        root.config(bg="#ffe69b")
+        color = '#ffe69b'
 
         def speak(audio):
             engine = pyttsx3.init('sapi5')
@@ -66,17 +66,17 @@ class AlFileOpener():
         #file widget
         fileText = Label(root, text="File to be searched and opened")
         fileText.pack()
-        fileText.config(bg=color,fg="#0474d4",font=textHighlightFont)
-        fileText= Entry(root, bg="white", fg='black', highlightbackground=color, highlightcolor=color, highlightthickness=3, bd=0,font=appHighlightFont)
+        fileText.config(bg=color,fg="#0078d7",font=textHighlightFont)
+        fileText= Entry(root, bg="#0078d7", fg='white', highlightbackground=color, highlightcolor=color, highlightthickness=3, bd=0,font=appHighlightFont)
         fileText.pack(fill=X)
 
         #submit button
         find = Button(root, borderwidth=0, highlightthickness=3, text="Open file", command=find)
-        find.config(bg=color,fg="#0474d4",font=textHighlightFont)
+        find.config(bg=color,fg="#0078d7",font=textHighlightFont)
         find.pack(fill=X)
 
         text = Text(root, font="sans-serif",  relief=SUNKEN , highlightbackground=color, highlightcolor=color, highlightthickness=5, bd=0)
-        text.config(bg="white", fg='black', height=2, font=appHighlightFont)
+        text.config(bg="#0078d7", fg='white', height=2, font=appHighlightFont)
         text.pack(fill=BOTH, expand=True)
 
         root.mainloop()
