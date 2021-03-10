@@ -61,17 +61,17 @@ class AlFileOpener():
                         speak('Set a default application to open the input file')
 
         appHighlightFont = font.Font(family='sans-serif', size=12, weight='bold')
-        textHighlightFont = font.Font(family='LEMON MILK', size=10, weight='bold')
+        textHighlightFont = font.Font(family='Segoe UI', size=12, weight='bold')
 
         #file widget
-        fileText = Label(root, text="File to be searched and opened")
+        fileText = Label(root, text="FILE TO BE SEARCHED AND OPENED")
         fileText.pack()
         fileText.config(bg=color,fg="#0078d7",font=textHighlightFont)
         fileText= Entry(root, bg="#0078d7", fg='white', highlightbackground=color, highlightcolor=color, highlightthickness=3, bd=0,font=appHighlightFont)
         fileText.pack(fill=X)
 
         #submit button
-        find = Button(root, borderwidth=0, highlightthickness=3, text="Open file", command=find)
+        find = Button(root, borderwidth=0, highlightthickness=3, text="OPEN FILE", command=find)
         find.config(bg=color,fg="#0078d7",font=textHighlightFont)
         find.pack(fill=X)
 
