@@ -3,10 +3,12 @@ from tkinter import*
 from tkinter import font
 import pyttsx3
 
-class AlFileOpener():
+cwd = os.path.dirname(os.path.realpath(__file__))
+
+class AlFileUnlatcher():
     
     def __init__(self):
-        root = Tk(className = " ALFILEOPENER ")
+        root = Tk(className = " ALFILEUNLATCHER ")
         root.geometry("400x125+1500+890")
         root.config(bg="#ffe69b")
         color = '#ffe69b'
@@ -20,21 +22,26 @@ class AlFileOpener():
 
         def find():
             inputFile = fileText.get()
-            fileName = './AlFileOpener/files_database.lst'
+            fileName = os.path.join(cwd+'\AlFileUnlatcher','files_database.lst')
             if os.path.exists(fileName):
                 pass
             else:
                 dFile = open(fileName, "x")
                 dFile.close()
-            filesList=[]    
+            filesList = []   
+            notFoundList = [] 
             dFile = open(fileName,"r")
             for file in dFile:
                 file = file.replace('\n','')
                 if os.path.basename(file) == inputFile:
-                    filesList.append(file)
+                    if os.path.isfile(file):
+                        filesList.append(file)
+                    else:
+                        notFoundList.append(file)
+                        del(file)
             dFile.close()
-            if not filesList:
-                check = subprocess.check_output('python ./AlFileOpener/AlFileSearcher.py "'+inputFile+'"').decode("utf-8").replace('\r\n',',:;')
+            if (len(filesList) == 0) or (len(notFoundList) != 0 and len(filesList) == 0) or (len(notFoundList) != 0):
+                check = subprocess.check_output(f'python {cwd}\AlFileUnlatcher\AlFileSearcher.py "'+inputFile+'"').decode("utf-8").replace('\r\n',',:;')
                 output = check.split(',:;')[:-1]
                 allFiles = [i + '\n' for i in output]
                 dFile = open(fileName,'a')
@@ -82,4 +89,4 @@ class AlFileOpener():
         root.mainloop()
 
 if __name__ == "__main__":
-    AlFileOpener() 
+    AlFileUnlatcher() 
