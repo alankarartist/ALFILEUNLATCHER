@@ -6,7 +6,7 @@ import pyttsx3
 class AlFileOpener():
     
     def __init__(self):
-        root = Tk(className = " AlFileOpener ")
+        root = Tk(className = " ALFILEOPENER ")
         root.geometry("400x125+1500+890")
         root.config(bg="#ffe69b")
         color = '#ffe69b'
