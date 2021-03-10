@@ -1,4 +1,4 @@
-# AlFileOpener
+# AlFileUnlatcher
 
 A python script based GUI interface to search and open all files with same name which are present in the system.
 
