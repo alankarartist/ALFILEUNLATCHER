@@ -10,6 +10,7 @@ class AlFileUnlatcher():
     def __init__(self):
         root = Tk(className = " ALFILEUNLATCHER ")
         root.geometry("400x125+1500+890")
+        root.resizable(0,0)
         root.iconbitmap(os.path.join(cwd+'\\UI\\icons', 'alfileunlatcher.ico'))
         root.config(bg="#ffe69b")
         color = '#ffe69b'
