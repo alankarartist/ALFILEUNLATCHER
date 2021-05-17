@@ -18,7 +18,7 @@ class AlFileUnlatcher():
         color = '#ffe69b'
 
         def callback(event):
-            root.geometry("360x100+1550+915")
+            root.geometry("400x175+1500+840")
 
         def showScreen(event):
             root.deiconify()
