@@ -1,4 +1,4 @@
-import subprocess, re, os
+import subprocess, os
 from tkinter import*
 from tkinter import font
 import pyttsx3
