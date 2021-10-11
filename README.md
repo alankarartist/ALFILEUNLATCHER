@@ -16,3 +16,9 @@ pip install Pillow
 
 1. Provide the input as given in above image.
 2. Then, click on OPEN FILE button.
+
+## Contributor
+
+<a href="https://github.com/alankarartist/ALFILEUNLATCHER/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=alankarartist/ALFILEUNLATCHER" />
+</a>
