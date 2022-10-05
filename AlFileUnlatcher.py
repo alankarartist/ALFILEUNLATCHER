@@ -3,8 +3,10 @@ import os
 from tkinter import Tk, END, Frame, SUNKEN, Text
 from tkinter import font, Label, Button, X, Entry, BOTH
 from PIL import ImageTk, Image
+import platform
 
 cwd = os.path.dirname(os.path.realpath(__file__))
+systemName = platform.system()
 
 
 class AlFileUnlatcher():
@@ -13,7 +15,11 @@ class AlFileUnlatcher():
         root = Tk(className=" ALFILEUNLATCHER ")
         root.geometry("400x175+1500+840")
         root.resizable(0, 0)
-        root.iconbitmap(os.path.join(cwd+'\\UI\\icons', 'alfileunlatcher.ico'))
+        iconPath = os.path.join(cwd+'\\UI\\icons',
+                                'alfileunlatcher.ico')
+        if systemName == 'Darwin':
+            iconPath = iconPath.replace('\\','/')
+        root.iconbitmap(iconPath)
         root.config(bg="#ffe69b")
         root.overrideredirect(1)
         color = '#ffe69b'
@@ -38,8 +44,13 @@ class AlFileUnlatcher():
 
         def find():
             inputFile = fileText.get()
-            fileName = os.path.join(cwd+'\\AlFileUnlatcher',
-                                    'files_database.lst')
+            if systemName == 'Windows':
+                fileName = os.path.join(cwd+'\\AlFileUnlatcher',
+                                        'files_database_win.lst')
+            elif systemName == 'Darwin':
+                fileName = os.path.join(cwd+'\\AlFileUnlatcher',
+                                        'files_database_mac.lst')
+                fileName = fileName.replace('\\','/')
             if os.path.exists(fileName):
                 pass
             else:
@@ -69,12 +80,28 @@ class AlFileUnlatcher():
             if (((len(filesList) == 0) or
                  (len(notFoundList) != 0 and len(filesList) == 0) or
                  (len(notFoundList) != 0))):
-                check = subprocess.check_output(f'python {cwd}\\AlFileUnlatche'
-                                                'r\\AlFileSearcher.py "' +
-                                                inputFile+'"').decode("utf-8")
-                check = check.replace('\r\n', ',:;')
-                output = check.split(',:;')[:-1]
-                allFiles = [i + '\n' for i in output]
+                searchFile = f'{cwd}\\AlFileUnlatcher\\AlFileSearcher.py'
+                if systemName == 'Darwin':
+                    searchFile = searchFile.replace('\\','/')
+                    process = subprocess.Popen([f'python3 {searchFile} "' +
+                                                inputFile+'"'],
+                                                stdout=subprocess.PIPE,
+                                                shell=True)
+                    check, _ = process.communicate()
+                    check = check.splitlines()
+                    output = [i.decode(encoding='utf-8', errors='strict')
+                              for i in check]
+                    output = list(set(output))
+                    foutput = [i for i in output
+                               if not '/System/Volumes/Data'+i in output]
+                    allFiles = [i + '\n' for i in foutput]
+                elif systemName == 'Windows':
+                    check = subprocess.check_output(f'python3 {searchFile} "' +
+                                                    inputFile+'"').decode("utf-8")
+                    check = check.replace('\r\n', ',:;')
+                    output = check.split(',:;')[:-1]
+                    allFiles = [i + '\n' for i in output]
+                allFiles.sort()
                 dFile = open(fileName, 'a')
                 dFile.writelines(allFiles)
                 dFile.close()
@@ -95,7 +122,12 @@ class AlFileUnlatcher():
                     try:
                         text.delete(1.0, END)
                         text.insert(1.0, 'Opening '+inputFile)
-                        os.startfile(os.path.join(directory, filename))
+                        fpath = os.path.join(directory, filename)
+                        if systemName == 'Windows':
+                            os.startfile(fpath)
+                        elif systemName == 'Darwin':
+                            fpath = fpath.replace('\\','/')
+                            os.system(f'open {fpath}')
                     except Exception as e:
                         print(e)
                         text.insert(1.0, 'Set a default application to open '
@@ -106,8 +138,7 @@ class AlFileUnlatcher():
                                      weight='bold')
 
         titleBar = Frame(root, bg='#141414', relief=SUNKEN, bd=0)
-        icon = Image.open(os.path.join(cwd+'\\UI\\icons',
-                                       'alfileunlatcher.ico'))
+        icon = Image.open(iconPath)
         icon = icon.resize((30, 30), Image.ANTIALIAS)
         icon = ImageTk.PhotoImage(icon)
         iconLabel = Label(titleBar, image=icon)
