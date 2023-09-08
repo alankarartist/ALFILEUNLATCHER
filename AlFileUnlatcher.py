@@ -3,10 +3,8 @@ import os
 from tkinter import Tk, END, Frame, SUNKEN, Text
 from tkinter import font, Label, Button, X, Entry, BOTH
 from PIL import ImageTk, Image
-import platform
 
 cwd = os.path.dirname(os.path.realpath(__file__))
-systemName = platform.system()
 
 
 class AlFileUnlatcher():
@@ -17,8 +15,6 @@ class AlFileUnlatcher():
         root.resizable(0, 0)
         iconPath = os.path.join(cwd+'\\UI\\icons',
                                 'alfileunlatcher.ico')
-        if systemName == 'Darwin':
-            iconPath = iconPath.replace('\\','/')
         root.iconbitmap(iconPath)
         root.config(bg="#ffe69b")
         root.overrideredirect(1)
@@ -44,13 +40,8 @@ class AlFileUnlatcher():
 
         def find():
             inputFile = fileText.get()
-            if systemName == 'Windows':
-                fileName = os.path.join(cwd+'\\AlFileUnlatcher',
-                                        'files_database_win.lst')
-            elif systemName == 'Darwin':
-                fileName = os.path.join(cwd+'\\AlFileUnlatcher',
-                                        'files_database_mac.lst')
-                fileName = fileName.replace('\\','/')
+            fileName = os.path.join(cwd+'\\AlFileUnlatcher',
+                                    'files_database_win.lst')
             if os.path.exists(fileName):
                 pass
             else:
@@ -81,26 +72,11 @@ class AlFileUnlatcher():
                  (len(notFoundList) != 0 and len(filesList) == 0) or
                  (len(notFoundList) != 0))):
                 searchFile = f'{cwd}\\AlFileUnlatcher\\AlFileSearcher.py'
-                if systemName == 'Darwin':
-                    searchFile = searchFile.replace('\\','/')
-                    process = subprocess.Popen([f'python3 {searchFile} "' +
-                                                inputFile+'"'],
-                                                stdout=subprocess.PIPE,
-                                                shell=True)
-                    check, _ = process.communicate()
-                    check = check.splitlines()
-                    output = [i.decode(encoding='utf-8', errors='strict')
-                              for i in check]
-                    output = list(set(output))
-                    foutput = [i for i in output
-                               if not '/System/Volumes/Data'+i in output]
-                    allFiles = [i + '\n' for i in foutput]
-                elif systemName == 'Windows':
-                    check = subprocess.check_output(f'python3 {searchFile} "' +
-                                                    inputFile+'"').decode("utf-8")
-                    check = check.replace('\r\n', ',:;')
-                    output = check.split(',:;')[:-1]
-                    allFiles = [i + '\n' for i in output]
+                check = subprocess.check_output(f'python3 {searchFile} "' +
+                                                inputFile+'"').decode("utf-8")
+                check = check.replace('\r\n', ',:;')
+                output = check.split(',:;')[:-1]
+                allFiles = [i + '\n' for i in output]
                 allFiles.sort()
                 dFile = open(fileName, 'a')
                 dFile.writelines(allFiles)
@@ -123,11 +99,7 @@ class AlFileUnlatcher():
                         text.delete(1.0, END)
                         text.insert(1.0, 'Opening '+inputFile)
                         fpath = os.path.join(directory, filename)
-                        if systemName == 'Windows':
-                            os.startfile(fpath)
-                        elif systemName == 'Darwin':
-                            fpath = fpath.replace('\\','/')
-                            os.system(f'open {fpath}')
+                        os.startfile(fpath)
                     except Exception as e:
                         print(e)
                         text.insert(1.0, 'Set a default application to open '
@@ -185,8 +157,7 @@ class AlFileUnlatcher():
         titleBar.bind("<Button-3>", showScreen)
         titleBar.bind("<Map>", screenAppear)
 
-        if systemName == 'Windows':
-            liftWindow()
+        liftWindow()
         root.mainloop()
 
 
